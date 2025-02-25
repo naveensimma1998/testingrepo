@@ -1,41 +1,11 @@
----
-
-- name: Retrieve access token from the SSO login
+- name: Retrieve access token via SSO script
   hosts: localhost
   gather_facts: no
-  vars:
-    vmanage_host: "wuepgtovmanage. sdwan. cisco.com"
-    vmanage_port: "443"
-    vmanage_username: "svc-APP2000405-prod"
-    vmanage_password: "H2towUSt1Qi1ayij"
-
   tasks:
-    - name: Send POST request to get JSESSIONID
-      uri:
-        url: "https://{{ vmanage_host }}:{{ vmanage_port }}/j_security_check"
-        method: POST
-        body:
-          j_username: "{{ vmanage_username }}"
-          j_password: "{{ vmanage_password }}"
-        body_format: form-urlencoded
-        return_content: yes
-        validate_certs: no
-      register: response
+    - name: Run Python script to get token
+      script: get_token.py
+      register: token_result
 
-    - name: Extract JSESSIONID from the response
-      set_fact:
-        jsessionid: "{{ response.cookies['JSESSIONID'] | default('No valid JSESSION ID returned') }}"
-
-    - name: Send GET request to retrieve token using JSESSIONID
-      uri:
-        url: "https://{{ vmanage_host }}:{{ vmanage_port }}/dataservice/client/token"
-        method: GET
-        headers:
-          Cookie: "JSESSIONID={{ jsessionid }}"
-        return_content: yes
-        validate_certs: no
-      register: api_response
-
-    - name: Output API response
+    - name: Output the token
       debug:
-        msg: "API Response: {{ api_response }}"
+        msg: "Token: {{ token_result.stdout }}"
