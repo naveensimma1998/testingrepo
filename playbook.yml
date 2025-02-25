@@ -26,7 +26,7 @@
       set_fact:
         jsessionid: "{{ response.cookies['JSESSIONID'] | default('No valid JSESSION ID returned') }}"
 
-    - name: Send GET request to retrieve token (if applicable) using JSESSIONID
+    - name: Send GET request to retrieve token using JSESSIONID
       uri:
         url: "https://{{ vmanage_host }}:{{ vmanage_port }}/dataservice/client/token"
         method: GET
