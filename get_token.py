@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import requests
 from bs4 import BeautifulSoup
 import json
@@ -72,9 +73,4 @@ if "login.microsoftonline.com" in response.url:
             response = session.post(action_url, data=cred_payload, verify=False, allow_redirects=True)
             soup = BeautifulSoup(response.text, "html.parser")
 
-# Step 4: Retrieve the token
-token_response = session.get(token_url, verify=False)
-if token_response.status_code == 200:
-    print(token_response.text.strip())  # Output the token
-else:
-    print(f"Failed to retrieve token. Status: {token_response.status_code}, Response: {token_response.text}")
+# Step
