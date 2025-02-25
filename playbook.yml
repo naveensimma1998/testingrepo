@@ -2,9 +2,18 @@
   hosts: localhost
   gather_facts: no
   tasks:
+    - name: Ensure Python dependencies are installed
+      pip:
+        name:
+          - requests
+          - beautifulsoup4
+        executable: pip3
+      become: yes  # Use sudo if required
+
     - name: Run Python script to get token
-      script: auth.py
+      script: get_token.py
       register: token_result
+      failed_when: "'Failed to retrieve token' in token_result.stdout"
 
     - name: Output the token
       debug:
