@@ -3,7 +3,7 @@
   gather_facts: no
   tasks:
     - name: Run Python script to get token
-      script: get_token.py
+      script: auth.py
       register: token_result
 
     - name: Output the token
